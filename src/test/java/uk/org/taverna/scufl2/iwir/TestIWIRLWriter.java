@@ -147,7 +147,7 @@ public class TestIWIRLWriter {
 	}
 
 	public File tempFile() throws IOException {
-		File bundleFile = File.createTempFile("test", ".scufl2");
+		File bundleFile = File.createTempFile("test", ".xml");
 		// bundleFile.deleteOnExit();
 		System.out.println(bundleFile);
 		return bundleFile;
