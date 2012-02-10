@@ -40,11 +40,10 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 			<version>${scufl2.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-usecases</artifactId>
-			<version>${scufl2.version}</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
 			<scope>test</scope>
-			<type>test-jar</type>
 		</dependency>
 	</dependencies>
 </project>
