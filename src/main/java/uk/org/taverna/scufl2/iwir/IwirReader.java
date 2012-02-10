@@ -30,6 +30,10 @@ import uk.org.taverna.scufl2.api.port.OutputActivityPort;
 import uk.org.taverna.scufl2.api.port.OutputPort;
 import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
 import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
+import uk.org.taverna.scufl2.api.profiles.ProcessorBinding;
+import uk.org.taverna.scufl2.api.profiles.ProcessorInputPortBinding;
+import uk.org.taverna.scufl2.api.profiles.ProcessorOutputPortBinding;
+import uk.org.taverna.scufl2.api.profiles.Profile;
 
 public class IwirReader implements WorkflowBundleReader {
 
@@ -86,26 +90,92 @@ public class IwirReader implements WorkflowBundleReader {
 		wf.setName(blockScope.getName());
 		readPorts(blockScope, wf);
 		readTasks(blockScope, wf);
-		readLinks(blockScope, wf);		
-		
+		readLinks(blockScope, wf);
+
 	}
 
-	protected void readTasks(BlockScope blockScope, Workflow wf) {
+	protected void readTasks(BlockScope blockScope, Workflow wf)
+			throws ReaderException {
 		for (AbstractTask abstTask : blockScope.getBodyTasks()) {
 			if (!(abstTask instanceof Task)) {
-				throw new ReaderException("R");
+				throw new ReaderException(
+						"Not implemented: task is not a Task, but "
+								+ abstTask.getClass());
 			}
 			Task task = (Task) abstTask;
+			Processor proc = new Processor(wf, task.getName());
+			readPorts(task, proc);
+
+			if (task.getTasktype().startsWith("http://")
+					|| task.getTasktype().startsWith("https://")) {
+				URI activityType = URI.create(task.getTasktype());
+				Profile prof = getProfile(wf.getParent());
+
+				Activity act = new Activity(task.getName());
+				act.setConfigurableType(activityType);
+				prof.getActivities().addWithUniqueName(act);
+
+				// Make activity ports
+				// TODO: Make Scufl2Tools.cloneProcessorPortsToActivity() ? 
+				readPorts(task, act);
+
+				// Processor binding
+				ProcessorBinding binding = new ProcessorBinding();
+				binding.setName(task.getName());
+				prof.getProcessorBindings().addWithUniqueName(binding);
+				binding.setBoundProcessor(proc);
+				binding.setBoundActivity(act);
+				matchPortBindings(binding);
+
+			}
+
 		}
 
 	}
 
-	protected void readLinks(BlockScope blockScope, Workflow wf) {
-		// TODO Auto-generated method stub
-		
+	// TODO: Move to Scufl2Tools
+	protected void matchPortBindings(ProcessorBinding binding) {
+		for (InputActivityPort actPort : binding.getBoundActivity()
+				.getInputPorts()) {
+			InputProcessorPort procPort = binding.getBoundProcessor()
+					.getInputPorts().getByName(actPort.getName());
+			if (procPort == null) {
+				continue;
+			}
+			ProcessorInputPortBinding portBinding = new ProcessorInputPortBinding();
+			portBinding.setBoundActivityPort(actPort);
+			portBinding.setBoundProcessorPort(procPort);
+			binding.getInputPortBindings().add(portBinding);
+		}
+
+		for (OutputProcessorPort procPort : binding.getBoundProcessor()
+				.getOutputPorts()) {
+			OutputActivityPort actPort = binding.getBoundActivity()
+					.getOutputPorts().getByName(procPort.getName());
+			if (procPort == null) {
+				continue;
+			}
+			ProcessorOutputPortBinding portBinding = new ProcessorOutputPortBinding();
+			portBinding.setBoundActivityPort(actPort);
+			portBinding.setBoundProcessorPort(procPort);
+			binding.getOutputPortBindings().add(portBinding);
+		}
 	}
 
-	protected void readPorts(AbstractTask blockScope, Ported ported) throws ReaderException {
+	protected Profile getProfile(WorkflowBundle workflowBundle) {
+		if (workflowBundle.getMainProfile() == null) {
+			workflowBundle.setMainProfile(new Profile("iwir"));
+		}
+		return workflowBundle.getMainProfile();
+	}
+
+	protected void readLinks(BlockScope blockScope, Workflow wf) {
+		// TODO Auto-generated method stub
+
+	}
+
+	protected void readPorts(AbstractTask blockScope, Ported ported)
+			throws ReaderException {
 		// or getAllInputPorts() ?
 		for (org.shiwa.fgi.iwir.InputPort inputPort : blockScope
 				.getInputPorts()) {
@@ -143,10 +213,11 @@ public class IwirReader implements WorkflowBundleReader {
 						+ ported.getClass());
 			}
 			if (port instanceof AbstractGranularDepthPort) {
-				AbstractGranularDepthPort depthPort = (AbstractGranularDepthPort)port;
-				depthPort.setDepth(outputPort.getType().getNestingLevel());				
-				depthPort.setGranularDepth(outputPort.getType().getNestingLevel());				
-			}			
+				AbstractGranularDepthPort depthPort = (AbstractGranularDepthPort) port;
+				depthPort.setDepth(outputPort.getType().getNestingLevel());
+				depthPort.setGranularDepth(outputPort.getType()
+						.getNestingLevel());
+			}
 		}
 	}
 

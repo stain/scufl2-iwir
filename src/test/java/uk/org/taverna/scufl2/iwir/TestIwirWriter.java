@@ -33,7 +33,7 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.io.ReaderException;
 import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
-public class TestIWIRLWriter {
+public class TestIwirWriter {
 
 	private static final String HELLOANYONE_WFBUNDLE = "/helloanyone.wfbundle";
 	public static final String APPLICATION_VND_SHIWA_IWIR_XML = "application/vnd.shiwa.iwir+xml";
