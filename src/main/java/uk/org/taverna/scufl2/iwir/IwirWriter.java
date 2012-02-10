@@ -46,8 +46,8 @@ public class IwirWriter implements WorkflowBundleWriter {
 
 	public void writeBundle(WorkflowBundle wfBundle, File file, String mediaType) throws WriterException, IOException {
 
-		IWIR iwir = new IWIR(wfBundle.getName());
-		// iwir.setVersion(bundle.getGlobalBaseURI().toASCIIString());
+		IWIR iwir = new IWIR(wfBundle.getGlobalBaseURI().toASCIIString());
+
 		Workflow wf = wfBundle.getMainWorkflow();
 		BlockScope workflowTask = new BlockScope(wf.getName());
 		iwir.setTask(workflowTask);

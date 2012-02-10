@@ -2,14 +2,15 @@ Convert Taverna Scufl2 workflow bundle to SHIWA IWIR description
 
 See:
 
-http://www.dps.uibk.ac.at/~kassian/shiwa/iwir/iwirTool-1.1.4/
-https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
-http://www.myexperiment.org/workflows/2649
+* http://www.dps.uibk.ac.at/~kassian/shiwa/iwir/iwirTool-1.1.4/
+* https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
+* http://www.myexperiment.org/workflows/2649
+* http://www.mygrid.org.uk/dev/wiki/display/developer/SCUFL2
 
 Example from converting helloanyone.wfbundle:
 	
 	
-	<IWIR version="1.1" wfname="Hello_Anyone" xmlns="http://shiwa-workflow.eu/IWIR">
+	<IWIR version="1.1" wfname="http://ns.taverna.org.uk/2010/workflowBundle/01348671-5aaa-4cc2-84cc-477329b70b0d/" xmlns="http://shiwa-workflow.eu/IWIR">
 	  <blockScope name="Hello_Anyone">
 	    <inputPorts>
 	      <inputPort name="name" type="string"/>
