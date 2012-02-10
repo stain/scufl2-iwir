@@ -18,6 +18,7 @@ import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
 public class TestIWIRLWriter {
 
+	private static final String HELLOANYONE_WFBUNDLE = "/helloanyone.wfbundle";
 	public static final String APPLICATION_VND_SHIWA_IWIR_XML = "application/vnd.shiwa.iwir+xml";
 	public static final String APPLICATION_VND_TAVERNA_SCUFL2_WORKFLOW_BUNDLE = "application/vnd.taverna.scufl2.workflow-bundle";
 	protected WorkflowBundle workflowBundle;
@@ -25,8 +26,8 @@ public class TestIWIRLWriter {
 
 	@Before
 	public void getExampleWorkflow() throws ReaderException, IOException {
-		URL resource = getClass().getResource("/helloayone.wfbundle");
-		assertNotNull(resource);
+		URL resource = getClass().getResource(HELLOANYONE_WFBUNDLE);
+		assertNotNull("Could not find " + HELLOANYONE_WFBUNDLE, resource);
 		workflowBundle = bundleIO.readBundle(resource, APPLICATION_VND_TAVERNA_SCUFL2_WORKFLOW_BUNDLE);
 	}
 
