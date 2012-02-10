@@ -35,6 +35,8 @@ import uk.org.taverna.scufl2.api.port.Port;
 
 public class IwirWriter implements WorkflowBundleWriter {
 
+	public static final String APPLICATION_VND_SHIWA_IWIR_XML = "application/vnd.shiwa.iwir+xml";
+
 	WeakHashMap<Port, WeakReference<AbstractPort>> portMapping = new WeakHashMap<Port, WeakReference<AbstractPort>>();
 	
 	WeakHashMap<Processor, WeakReference<AbstractTask>> procMapping = new WeakHashMap<Processor, WeakReference<AbstractTask>>();
@@ -43,7 +45,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 	private Scufl2Tools scufl2Tools = new Scufl2Tools();
 	
 
-	private void addControlLinks(BlockScope workflowTask, Workflow wf,
+	protected void addControlLinks(BlockScope workflowTask, Workflow wf,
 			WorkflowBundle wfBundle) {
 		for (ControlLink cl : wf.getControlLinks() ) {
 			if (! (cl instanceof BlockingControlLink)) {
@@ -56,7 +58,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 		}
 	}
 
-	private void addLinks(BlockScope workflowTask, Workflow workflow,
+	protected void addLinks(BlockScope workflowTask, Workflow workflow,
 			WorkflowBundle wfBundle) {
 		for (DataLink dl : workflow.getDataLinks()) {
 			if (dl.getMergePosition() != null) {
@@ -70,7 +72,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 	}
 
 
-	private void addPorts(AbstractTask task, Ported proc) {
+	protected void addPorts(AbstractTask task, Ported proc) {
 		for (uk.org.taverna.scufl2.api.port.InputPort inPort : proc
 				.getInputPorts()) {
 			// TODO: Check for known binaries
@@ -102,7 +104,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 
 		}
 	}
-	private void addProcessors(BlockScope workflowTask, Workflow workflow,
+	protected void addProcessors(BlockScope workflowTask, Workflow workflow,
 			WorkflowBundle wfBundle) {
 		for (Processor proc : workflow.getProcessors()) {
 			Configuration config = scufl2Tools
@@ -122,7 +124,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 	}
 
 	public Set<String> getMediaTypes() {
-		return Collections.singleton("application/vnd.shiwa.iwir+xml");
+		return Collections.singleton(APPLICATION_VND_SHIWA_IWIR_XML);
 	}
 
 	public void writeBundle(WorkflowBundle wfBundle, File file, String mediaType) throws WriterException, IOException {
@@ -131,7 +133,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 		iwir.asXMLFile(file);
 	}
 
-	private IWIR bundleToIwir(WorkflowBundle wfBundle) {
+	public IWIR bundleToIwir(WorkflowBundle wfBundle) {
 		IWIR iwir = new IWIR(wfBundle.getGlobalBaseURI().toASCIIString());
 
 		Workflow wf = wfBundle.getMainWorkflow();

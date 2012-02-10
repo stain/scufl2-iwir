@@ -4,10 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<!-- 
 	<service ref="iwirReader" interface="uk.org.taverna.scufl2.api.io.WorkflowBundleReader" />
- -->
-
 	<service ref="iwirWriter" interface="uk.org.taverna.scufl2.api.io.WorkflowBundleWriter" />
 
 </beans:beans>
