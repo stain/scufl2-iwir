@@ -22,6 +22,8 @@ import uk.org.taverna.scufl2.api.common.Ported;
 import uk.org.taverna.scufl2.api.common.Scufl2Tools;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.BlockingControlLink;
+import uk.org.taverna.scufl2.api.core.ControlLink;
 import uk.org.taverna.scufl2.api.core.DataLink;
 import uk.org.taverna.scufl2.api.core.Processor;
 import uk.org.taverna.scufl2.api.core.Workflow;
@@ -53,10 +55,25 @@ public class IwirWriter implements WorkflowBundleWriter {
 		addPorts(workflowTask, (Ported) wf);
 		addProcessors(workflowTask, wf, wfBundle);
 		addLinks(workflowTask, wf, wfBundle);
-
+		addControlLinks(workflowTask, wf, wfBundle);
+		
 		System.out.println(iwir.asXMLString());
 		iwir.asXMLFile(file);
 	}
+
+	private void addControlLinks(BlockScope workflowTask, Workflow wf,
+			WorkflowBundle wfBundle) {
+		for (ControlLink cl : wf.getControlLinks() ) {
+			if (! (cl instanceof BlockingControlLink)) {
+				continue;
+			}
+			BlockingControlLink bCL = (BlockingControlLink) cl;
+			AbstractTask blockTask = procMapping.get(bCL.getBlock()).get();
+			AbstractTask untilFinishedTask = procMapping.get(bCL.getUntilFinished()).get();
+			workflowTask.addLink(untilFinishedTask, blockTask);			
+		}
+	}
+
 
 	private void addLinks(BlockScope workflowTask, Workflow workflow,
 			WorkflowBundle wfBundle) {
