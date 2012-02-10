@@ -3,6 +3,7 @@ package uk.org.taverna.scufl2.iwir;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.Set;
@@ -39,27 +40,8 @@ public class IwirWriter implements WorkflowBundleWriter {
 	WeakHashMap<Processor, WeakReference<AbstractTask>> procMapping = new WeakHashMap<Processor, WeakReference<AbstractTask>>();
 	
 	
-	public Set<String> getMediaTypes() {
-		return Collections.singleton("application/vnd.shiwa.iwir+xml");
-	}
+	private Scufl2Tools scufl2Tools = new Scufl2Tools();
 	
-
-	public void writeBundle(WorkflowBundle wfBundle, File file, String mediaType) throws WriterException, IOException {
-
-		IWIR iwir = new IWIR(wfBundle.getGlobalBaseURI().toASCIIString());
-
-		Workflow wf = wfBundle.getMainWorkflow();
-		BlockScope workflowTask = new BlockScope(wf.getName());
-		iwir.setTask(workflowTask);
-
-		addPorts(workflowTask, (Ported) wf);
-		addProcessors(workflowTask, wf, wfBundle);
-		addLinks(workflowTask, wf, wfBundle);
-		addControlLinks(workflowTask, wf, wfBundle);
-		
-		System.out.println(iwir.asXMLString());
-		iwir.asXMLFile(file);
-	}
 
 	private void addControlLinks(BlockScope workflowTask, Workflow wf,
 			WorkflowBundle wfBundle) {
@@ -70,10 +52,9 @@ public class IwirWriter implements WorkflowBundleWriter {
 			BlockingControlLink bCL = (BlockingControlLink) cl;
 			AbstractTask blockTask = procMapping.get(bCL.getBlock()).get();
 			AbstractTask untilFinishedTask = procMapping.get(bCL.getUntilFinished()).get();
-			workflowTask.addLink(untilFinishedTask, blockTask);			
+			workflowTask.addLink(untilFinishedTask, blockTask);
 		}
 	}
-
 
 	private void addLinks(BlockScope workflowTask, Workflow workflow,
 			WorkflowBundle wfBundle) {
@@ -82,33 +63,12 @@ public class IwirWriter implements WorkflowBundleWriter {
 				System.err.println("Merge ports not yet supported");
 				continue;
 			}
-
 			AbstractPort fromPort = portMapping.get(dl.getReceivesFrom()).get();
 			AbstractPort toPort = portMapping.get(dl.getSendsTo()).get();
-			
 			workflowTask.addLink(fromPort, toPort);			
 		}
-		
-
 	}
 
-	private void addProcessors(BlockScope workflowTask, Workflow workflow,
-			WorkflowBundle wfBundle) {
-		for (Processor proc : workflow.getProcessors()) {
-			Configuration config = new Scufl2Tools()
-					.configurationForActivityBoundToProcessor(proc,
-							wfBundle.getMainProfile());
-			Activity activity = (Activity) config.getConfigures();
-			String tasktype = activity.getConfigurableType().toASCIIString();
-			Task procTask = new Task(proc.getName(), tasktype);
-			addPorts(procTask, proc);
-			workflowTask.addTask(procTask);
-			procMapping.put(proc, new WeakReference<AbstractTask>(procTask));
-			// TODO: Check for nested workflows and make a BlockScope instead
-			// TODO: Detect while loops
-			// TODO: Detect iterations
-		}
-	}
 
 	private void addPorts(AbstractTask task, Ported proc) {
 		for (uk.org.taverna.scufl2.api.port.InputPort inPort : proc
@@ -142,11 +102,57 @@ public class IwirWriter implements WorkflowBundleWriter {
 
 		}
 	}
+	private void addProcessors(BlockScope workflowTask, Workflow workflow,
+			WorkflowBundle wfBundle) {
+		for (Processor proc : workflow.getProcessors()) {
+			Configuration config = scufl2Tools
+					.configurationForActivityBoundToProcessor(proc,
+							wfBundle.getMainProfile());
+			Activity activity = (Activity) config.getConfigures();
+			String tasktype = activity.getConfigurableType().toASCIIString();
+			Task procTask = new Task(proc.getName(), tasktype);
+			addPorts(procTask, proc);
+			workflowTask.addTask(procTask);
+			procMapping.put(proc, new WeakReference<AbstractTask>(procTask));
+			
+			// TODO: Check for nested workflows and make a BlockScope instead
+			// TODO: Detect while loops
+			// TODO: Detect iterations
+		}
+	}
+
+	public Set<String> getMediaTypes() {
+		return Collections.singleton("application/vnd.shiwa.iwir+xml");
+	}
+
+	public void writeBundle(WorkflowBundle wfBundle, File file, String mediaType) throws WriterException, IOException {
+		IWIR iwir = bundleToIwir(wfBundle);
+		System.out.println(iwir.asXMLString());
+		iwir.asXMLFile(file);
+	}
+
+	private IWIR bundleToIwir(WorkflowBundle wfBundle) {
+		IWIR iwir = new IWIR(wfBundle.getGlobalBaseURI().toASCIIString());
+
+		Workflow wf = wfBundle.getMainWorkflow();
+		BlockScope workflowTask = new BlockScope(wf.getName());
+		iwir.setTask(workflowTask);
+
+		addPorts(workflowTask, (Ported) wf);
+		addProcessors(workflowTask, wf, wfBundle);
+		addLinks(workflowTask, wf, wfBundle);
+		addControlLinks(workflowTask, wf, wfBundle);
+		return iwir;
+	}
 
 	public void writeBundle(WorkflowBundle bundle, OutputStream stream,
 			String mediaType) throws WriterException, IOException {
-		// TODO Auto-generated method stub
-
+		IWIR iwir = bundleToIwir(bundle);
+		String xml = iwir.asXMLString();
+		OutputStreamWriter writer = new OutputStreamWriter(stream, "utf-8");
+		writer.append(xml);
+		writer.flush();
+		writer.close();
 	}
 
 }

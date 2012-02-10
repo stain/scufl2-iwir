@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,7 +27,6 @@ import org.shiwa.fgi.iwir.DataLink;
 import org.shiwa.fgi.iwir.IWIR;
 import org.shiwa.fgi.iwir.InputPort;
 import org.shiwa.fgi.iwir.OutputPort;
-import org.shiwa.fgi.iwir.SimpleType;
 import org.shiwa.fgi.iwir.Task;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
@@ -63,7 +64,24 @@ public class TestIWIRLWriter {
 		File bundleFile = tempFile();
 		bundleIO.writeBundle(workflowBundle, bundleFile,
 				APPLICATION_VND_SHIWA_IWIR_XML);
-		IWIR iwir = new IWIR(bundleFile);
+		IWIR iwir = new IWIR(bundleFile);		
+		verifyBundle(iwir);
+	}
+
+	@Test
+	public void verifyBundleStream() throws Exception {
+		File bundleFile = tempFile();
+		OutputStream out = new FileOutputStream(bundleFile);
+		bundleIO.writeBundle(workflowBundle, out,
+				APPLICATION_VND_SHIWA_IWIR_XML);
+		out.flush();
+		out.close();
+		// FIXME: IWIR can't read from string?
+		IWIR iwir = new IWIR(bundleFile);		
+		verifyBundle(iwir);
+	}
+	
+	private void verifyBundle(IWIR iwir) {
 		assertEquals(
 				"http://ns.taverna.org.uk/2010/workflowBundle/01348671-5aaa-4cc2-84cc-477329b70b0d/",
 				iwir.getWfname());
@@ -141,15 +159,12 @@ public class TestIWIRLWriter {
 			foundLinks.put(dl.getFromPort().getName(), dl.getToPort().getName());			
 		}
 		assertEquals(expectedLinks, foundLinks);
-		
-		
-		
 	}
 
 	public File tempFile() throws IOException {
 		File bundleFile = File.createTempFile("test", ".xml");
-		// bundleFile.deleteOnExit();
-		System.out.println(bundleFile);
+		 bundleFile.deleteOnExit();
+		// System.out.println(bundleFile);
 		return bundleFile;
 	}
 
