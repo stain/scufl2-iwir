@@ -45,5 +45,12 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 			<version>4.4</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.shiwa.fgi.iwir</groupId>
+			<artifactId>iwir</artifactId>
+			<version>1.1.4</version>
+			<scope>system</scope>
+			<systemPath>${project.build.directory}/../iwir/iwirTool-1.1.4.jar</systemPath>
+		</dependency>
 	</dependencies>
 </project>
