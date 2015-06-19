@@ -9,31 +9,31 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.common.Ported;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.io.ReaderException;
+import org.apache.taverna.scufl2.api.io.WorkflowBundleReader;
+import org.apache.taverna.scufl2.api.port.AbstractGranularDepthPort;
+import org.apache.taverna.scufl2.api.port.InputActivityPort;
+import org.apache.taverna.scufl2.api.port.InputPort;
+import org.apache.taverna.scufl2.api.port.InputProcessorPort;
+import org.apache.taverna.scufl2.api.port.InputWorkflowPort;
+import org.apache.taverna.scufl2.api.port.OutputActivityPort;
+import org.apache.taverna.scufl2.api.port.OutputPort;
+import org.apache.taverna.scufl2.api.port.OutputProcessorPort;
+import org.apache.taverna.scufl2.api.port.OutputWorkflowPort;
+import org.apache.taverna.scufl2.api.profiles.ProcessorBinding;
+import org.apache.taverna.scufl2.api.profiles.ProcessorInputPortBinding;
+import org.apache.taverna.scufl2.api.profiles.ProcessorOutputPortBinding;
+import org.apache.taverna.scufl2.api.profiles.Profile;
 import org.shiwa.fgi.iwir.AbstractTask;
 import org.shiwa.fgi.iwir.BlockScope;
 import org.shiwa.fgi.iwir.IWIR;
 import org.shiwa.fgi.iwir.Task;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.common.Ported;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
-import uk.org.taverna.scufl2.api.io.ReaderException;
-import uk.org.taverna.scufl2.api.io.WorkflowBundleReader;
-import uk.org.taverna.scufl2.api.port.AbstractGranularDepthPort;
-import uk.org.taverna.scufl2.api.port.InputActivityPort;
-import uk.org.taverna.scufl2.api.port.InputPort;
-import uk.org.taverna.scufl2.api.port.InputProcessorPort;
-import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
-import uk.org.taverna.scufl2.api.port.OutputActivityPort;
-import uk.org.taverna.scufl2.api.port.OutputPort;
-import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
-import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
-import uk.org.taverna.scufl2.api.profiles.ProcessorBinding;
-import uk.org.taverna.scufl2.api.profiles.ProcessorInputPortBinding;
-import uk.org.taverna.scufl2.api.profiles.ProcessorOutputPortBinding;
-import uk.org.taverna.scufl2.api.profiles.Profile;
 
 public class IwirReader implements WorkflowBundleReader {
 
@@ -112,7 +112,7 @@ public class IwirReader implements WorkflowBundleReader {
 				Profile prof = getProfile(wf.getParent());
 
 				Activity act = new Activity(task.getName());
-				act.setConfigurableType(activityType);
+				act.setType(activityType);
 				prof.getActivities().addWithUniqueName(act);
 
 				// Make activity ports
@@ -137,8 +137,9 @@ public class IwirReader implements WorkflowBundleReader {
 	protected void matchPortBindings(ProcessorBinding binding) {
 		for (InputActivityPort actPort : binding.getBoundActivity()
 				.getInputPorts()) {
-			InputProcessorPort procPort = binding.getBoundProcessor()
-					.getInputPorts().getByName(actPort.getName());
+			InputProcessorPort procPort = binding
+					.getBoundProcessor().getInputPorts()
+					.getByName(actPort.getName());
 			if (procPort == null) {
 				continue;
 			}

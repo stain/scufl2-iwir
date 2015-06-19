@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.io.ReaderException;
+import org.apache.taverna.scufl2.api.io.WorkflowBundleIO;
 import org.junit.Before;
 import org.junit.Test;
 import org.shiwa.fgi.iwir.AbstractDataPort;
@@ -29,9 +32,6 @@ import org.shiwa.fgi.iwir.InputPort;
 import org.shiwa.fgi.iwir.OutputPort;
 import org.shiwa.fgi.iwir.Task;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.io.ReaderException;
-import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
 public class TestIwirWriter {
 

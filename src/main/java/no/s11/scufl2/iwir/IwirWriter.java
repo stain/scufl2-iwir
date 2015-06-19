@@ -9,6 +9,22 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.common.Ported;
+import org.apache.taverna.scufl2.api.common.Scufl2Tools;
+import org.apache.taverna.scufl2.api.configurations.Configuration;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.core.BlockingControlLink;
+import org.apache.taverna.scufl2.api.core.ControlLink;
+import org.apache.taverna.scufl2.api.core.DataLink;
+import org.apache.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.io.WorkflowBundleWriter;
+import org.apache.taverna.scufl2.api.io.WriterException;
+import org.apache.taverna.scufl2.api.port.InputPort;
+import org.apache.taverna.scufl2.api.port.OutputPort;
+import org.apache.taverna.scufl2.api.port.OutputProcessorPort;
+import org.apache.taverna.scufl2.api.port.Port;
 import org.shiwa.fgi.iwir.AbstractPort;
 import org.shiwa.fgi.iwir.AbstractTask;
 import org.shiwa.fgi.iwir.BlockScope;
@@ -18,20 +34,6 @@ import org.shiwa.fgi.iwir.IWIR;
 import org.shiwa.fgi.iwir.SimpleType;
 import org.shiwa.fgi.iwir.Task;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.common.Ported;
-import uk.org.taverna.scufl2.api.common.Scufl2Tools;
-import uk.org.taverna.scufl2.api.configurations.Configuration;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.core.BlockingControlLink;
-import uk.org.taverna.scufl2.api.core.ControlLink;
-import uk.org.taverna.scufl2.api.core.DataLink;
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
-import uk.org.taverna.scufl2.api.io.WorkflowBundleWriter;
-import uk.org.taverna.scufl2.api.io.WriterException;
-import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
-import uk.org.taverna.scufl2.api.port.Port;
 
 public class IwirWriter implements WorkflowBundleWriter {
 
@@ -73,7 +75,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 
 
 	protected void addPorts(AbstractTask task, Ported proc) {
-		for (uk.org.taverna.scufl2.api.port.InputPort inPort : proc
+		for (InputPort inPort : proc
 				.getInputPorts()) {
 			// TODO: Check for known binaries
 			DataType type = SimpleType.STRING;
@@ -86,7 +88,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 			portMapping.put(inPort, new WeakReference<AbstractPort>(inputPort));			
 		}
 
-		for (uk.org.taverna.scufl2.api.port.OutputPort outPort : proc
+		for (OutputPort outPort : proc
 				.getOutputPorts()) {
 			// TODO: Check for known binaries
 			DataType type = SimpleType.STRING;
@@ -111,7 +113,7 @@ public class IwirWriter implements WorkflowBundleWriter {
 					.configurationForActivityBoundToProcessor(proc,
 							wfBundle.getMainProfile());
 			Activity activity = (Activity) config.getConfigures();
-			String tasktype = activity.getConfigurableType().toASCIIString();
+			String tasktype = activity.getType().toASCIIString();
 			Task procTask = new Task(proc.getName(), tasktype);
 			addPorts(procTask, proc);
 			workflowTask.addTask(procTask);
