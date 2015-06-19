@@ -13,17 +13,26 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 		<scufl2.version>0.15.1-incubating-SNAPSHOT</scufl2.version>
 	</properties>
 
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-      <comments>
+	<url>https://github.com/stain/scufl2-iwir/</url>
+
+	<scm>
+		<connection>scm:git:https://github.com/stain/scufl2-iwir.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/stain/scufl2-iwir.git</developerConnection>
+		<url>https://github.com/stain/scufl2-iwir/</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>
         This plugin is licensed under Apache License 2.0, but depends
         on IWIRTool which is licensed under LGPL 3.0.
       </comments>
-    </license>
-  </licenses>
+		</license>
+	</licenses>
 
 	<dependencies>
 		<dependency>
@@ -51,8 +60,8 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 			<groupId>org.shiwa.fgi.iwir</groupId>
 			<artifactId>iwirTool</artifactId>
 			<version>1.1.11</version>
-      <!-- WARNING: LGPL dependency -->
-      <!-- See http://sourceforge.net/projects/iwirtool/ -->
+			<!-- WARNING: LGPL dependency -->
+			<!-- See http://sourceforge.net/projects/iwirtool/ -->
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -61,26 +70,38 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 		</dependency>
 	</dependencies>
 
-  <repositories>
-    <repository>
-      <id>apache.snapshots</id>
-      <name>Apache Snapshot Repository</name>
-      <url>http://repository.apache.org/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-    <repository>
-      <id>mygrid-ext-release-repository</id>
-      <name>myGrid ext-release Repository</name>
-      <url>http://repository.mygrid.org.uk/artifactory/ext-release-local/</url>
-      <releases />
-      <snapshots>
-              <enabled>false</enabled>
-      </snapshots>
-    </repository>
+	<repositories>
+		<repository>
+			<id>apache.snapshots</id>
+			<name>Apache Snapshot Repository</name>
+			<url>http://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>mygrid-ext-release-repository</id>
+			<name>myGrid ext-release Repository</name>
+			<url>http://repository.mygrid.org.uk/artifactory/ext-release-local/</url>
+			<releases />
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
+	<distributionManagement>
+		<repository>
+			<id>mygrid-libs-release</id>
+			<name>myGrid libs-release</name>
+			<url>http://repository.mygrid.org.uk/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>mygrid-libs-snapshot</id>
+			<name>myGrid libs-snapshot</name>
+			<url>http://repository.mygrid.org.uk/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-  </repositories>
 
 </project>
