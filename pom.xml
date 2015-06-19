@@ -10,7 +10,7 @@
 https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 </description>
 	<properties>
-		<scufl2.version>0.15.0-incubating</scufl2.version>
+		<taverna.language.version>0.15.1-incubating-SNAPSHOT</taverna.language.version>
 	</properties>
 
 	<url>https://github.com/stain/scufl2-iwir/</url>
@@ -38,17 +38,17 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 		<dependency>
 			<groupId>org.apache.taverna.language</groupId>
 			<artifactId>taverna-scufl2-api</artifactId>
-			<version>${scufl2.version}</version>
+			<version>${taverna.language.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.taverna.language</groupId>
 			<artifactId>taverna-scufl2-t2flow</artifactId>
-			<version>${scufl2.version}</version>
+			<version>${taverna.language.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.taverna.language</groupId>
 			<artifactId>taverna-scufl2-wfbundle</artifactId>
-			<version>${scufl2.version}</version>
+			<version>${taverna.language.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
