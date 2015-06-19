@@ -10,7 +10,7 @@
 https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 </description>
 	<properties>
-		<scufl2.version>0.15.1-incubating-SNAPSHOT</scufl2.version>
+		<scufl2.version>0.15.0-incubating</scufl2.version>
 	</properties>
 
 	<url>https://github.com/stain/scufl2-iwir/</url>
