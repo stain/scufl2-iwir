@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class TestIwirReader {
 
-	private static final String HELLOANYONE_IWIR = "helloanyone.iwir";
+	private static final String HELLOANYONE_IWIR = "/helloanyone.iwir";
 	protected WorkflowBundleIO bundleIO = new WorkflowBundleIO();
 	private WorkflowBundle workflowBundle;
 

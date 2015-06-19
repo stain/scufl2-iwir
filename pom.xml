@@ -51,7 +51,6 @@ https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 			<groupId>org.shiwa.fgi.iwir</groupId>
 			<artifactId>iwirTool</artifactId>
 			<version>1.1.11</version>
-			<scope>optional</scope>
       <!-- WARNING: LGPL dependency -->
       <!-- See http://sourceforge.net/projects/iwirtool/ -->
 		</dependency>

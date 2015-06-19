@@ -87,6 +87,7 @@ public class IwirReader implements WorkflowBundleReader {
 	protected void readBlockScope(BlockScope blockScope,
 			WorkflowBundle workflowBundle) throws ReaderException {
 		Workflow wf = new Workflow();
+		wf.setParent(workflowBundle);
 		wf.setName(blockScope.getName());
 		readPorts(blockScope, wf);
 		readTasks(blockScope, wf);
