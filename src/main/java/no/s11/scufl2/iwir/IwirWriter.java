@@ -1,4 +1,4 @@
-package uk.org.taverna.scufl2.iwir;
+package no.s11.scufl2.iwir;
 
 import java.io.File;
 import java.io.IOException;

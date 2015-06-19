@@ -1,4 +1,4 @@
-package uk.org.taverna.scufl2.iwir;
+package no.s11.scufl2.iwir;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

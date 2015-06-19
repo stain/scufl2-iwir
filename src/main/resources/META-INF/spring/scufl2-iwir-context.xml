@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="iwirReader" class="uk.org.taverna.scufl2.iwir.IwirReader" />
+	<bean id="iwirReader" class="no.s11.scufl2.iwir.IwirReader" />
 
-	<bean id="iwirWriter" class="uk.org.taverna.scufl2.iwir.IwirWriter" />
+	<bean id="iwirWriter" class="no.s11.scufl2.iwir.IwirWriter" />
 
 </beans>
