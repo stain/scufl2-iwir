@@ -10,7 +10,7 @@
 https://www.shiwa-workflow.eu/documents/10753/55350/IWIR+v1.1+Specification
 </description>
 	<properties>
-		<taverna.language.version>0.15.1-incubating-SNAPSHOT</taverna.language.version>
+		<taverna.language.version>0.15.0-incubating</taverna.language.version>
 	</properties>
 
 	<url>https://github.com/stain/scufl2-iwir/</url>
